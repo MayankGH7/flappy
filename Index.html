@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="en" onclick="jump()">
+  <head>
+    <meta charset="UTF-8" />
+    <title>Flappy Bird</title>
+    <style type="text/css" media="all">
+      * {
+        padding: 0;
+        margin: 0;
+        font-family: serif;
+      }
+      #game {
+        background-image: url("https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR5e773lYwhclJUH2_0cb1yv7WS_01CvElJrQ&usqp=CAU");
+        width: 400px;
+        height: 500px;
+        border: 1px solid black;
+        margin: auto;
+        overflow: hidden;
+        position: relative;
+      }
+      #block {
+        width: 50px;
+        height: 500px;
+        background: linear-gradient( blue ,cyan);
+        position: relative;
+        left: 400px;
+        animation: block 2s infinite linear;
+      }
+      @keyframes block {
+        0% {
+          left: 400px;
+        }
+        100% {
+          left: -50px;
+        }
+      }
+      #hole {
+        width: 50px;
+        height: 150px;
+        background-color: transparent;
+        position: relative;
+        left: 400px;
+        top: -500px;
+        animation: block 2s infinite linear;
+        background: linear-gradient(red,yellow);
+      }
+      #character {
+        width: 40px;
+        height: 40px;
+        position: absolute;
+        top: 100px;
+        border-radius: 50%;
+        
+      }
+      #character img{
+        width: 100%;
+        height: 100%;
+        transition: all 1s
+      }
+      p{
+        text-align: center;
+        margin: 40px;
+        background: black;
+        color: white;
+        padding: 10px;
+        border-radius: 10px;
+      }
+.tilt-up {
+  transform: rotate(-20deg);
+  transition: transform 0.2s ease-in-out;
+}
+    </style>
+  </head>
+  <body>
+    <div id="game">
+      <div id="block"></div>
+      <div id="hole"></div>
+      <div id="character"><img src="https://www.pngmart.com/files/12/Flappy-Bird-Transparent-PNG.png" alt="" /></div>
+    </div>
+    <p>Iska Logic likhne mai L*** gaye 🥺</p>
+    <script type="text/javascript" charset="utf-8">
+      var block = document.getElementById("block");
+      var hole = document.getElementById("hole");
+      var character = document.getElementById("character");
+      var jumping = 0;
+      var counter = 0;
+      var high_score = 0;
+      hole.addEventListener("animationiteration", () => {
+        var random = -(Math.random() * 300 + 150);
+        hole.style.top = random + "px";
+        counter++;
+      });
+      setInterval(function () {
+  var characterTop = parseInt(
+    window.getComputedStyle(character).getPropertyValue("top")
+  );
+  if (jumping == 0) {
+    character.style.top = characterTop + 3 + "px";
+    character.classList.add('falling');
+  } else {
+    character.classList.remove('falling');
+  }
+  
+        var blockLeft = parseInt(
+          window.getComputedStyle(block).getPropertyValue("left")
+        );
+        var holeTop = parseInt(
+          window.getComputedStyle(hole).getPropertyValue("top")
+        );
+        var cTop = -(500 - characterTop);
+        if (
+          characterTop > 480 ||
+          (blockLeft < 20 &&
+            blockLeft > -50 &&
+            (cTop < holeTop || cTop > holeTop + 130))
+        ) {
+          if(high_score < counter){
+            high_score = counter;
+          }
+         alert(`
+         Game over
+         Mayank's High Score : 17
+         Your Score:   ${counter - 1} 
+         Your High Score : ${high_score - 1}
+         `)   ;
+          character.style.top = 100 + "px";
+          counter = 0;
+        }
+      }, 10);
+
+      function jump() {
+  jumping = 1;
+  let jumpCount = 0;
+  var jumpInterval = setInterval(function () {
+    var characterTop = parseInt(
+      window.getComputedStyle(character).getPropertyValue("top")
+    );
+    if (characterTop > 6 && jumpCount < 15) {
+      character.style.top = characterTop - 5 + "px";
+    }
+    if (jumpCount >20) {
+      clearInterval(jumpInterval);
+      jumping = 0;
+      jumpCount = 0;
+    }
+    jumpCount++;
+  }, 10);
+  tiltUp();
+}
+      
+      function tiltUp() {
+  character.classList.add('tilt-up');
+  setTimeout(function() {
+    character.classList.remove('tilt-up');
+  }, 200);
+}
+      
+      
+    </script>
+  </body>
+</html>
